@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Timer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <div class="bg-texture"></div>
+
+  <main class="container">
+
+    <!-- Header Illustration -->
+    <header class="header">
+      <div class="tiles-illustration" aria-label="Rummikub tiles">
+        <svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg" class="tiles-svg">
+          <defs>
+            <filter id="tileShadow" x="-10%" y="-10%" width="130%" height="130%">
+              <feDropShadow dx="3" dy="4" stdDeviation="3" flood-color="rgba(80,40,10,0.35)" />
+            </filter>
+            <filter id="tileShadowActive" x="-10%" y="-10%" width="130%" height="130%">
+              <feDropShadow dx="4" dy="6" stdDeviation="5" flood-color="rgba(80,40,10,0.5)" />
+            </filter>
+          </defs>
+
+          <!-- Centred tile group: tiles span 538px in 600px viewBox → shift right 31px -->
+          <g transform="translate(31, 0)">
+
+          <!-- Tile 1 — Red 7 -->
+          <g transform="rotate(-8, 55, 75)" filter="url(#tileShadow)">
+            <rect x="8" y="18" width="72" height="100" rx="7" fill="#F5EDD8" stroke="#C8A96E" stroke-width="2"/>
+            <rect x="12" y="22" width="64" height="92" rx="5" fill="#FAF3E4" stroke="#D4B47A" stroke-width="1"/>
+            <text x="44" y="86" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="44" fill="#C0392B">7</text>
+          </g>
+
+          <!-- Tile 2 — Blue 11 -->
+          <g transform="rotate(-2, 145, 75)" filter="url(#tileShadow)">
+            <rect x="105" y="14" width="72" height="100" rx="7" fill="#F5EDD8" stroke="#C8A96E" stroke-width="2"/>
+            <rect x="109" y="18" width="64" height="92" rx="5" fill="#FAF3E4" stroke="#D4B47A" stroke-width="1"/>
+            <text x="141" y="82" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="38" fill="#1A5C9E">11</text>
+          </g>
+
+          <!-- Tile 3 — Black 3 (raised / active) -->
+          <g transform="rotate(3, 235, 70)" filter="url(#tileShadowActive)">
+            <rect x="199" y="8" width="72" height="100" rx="7" fill="#FAF3E4" stroke="#B8982E" stroke-width="2.5"/>
+            <rect x="203" y="12" width="64" height="92" rx="5" fill="#FFF8EB" stroke="#D4B47A" stroke-width="1"/>
+            <text x="235" y="76" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="44" fill="#1C1C1C">3</text>
+          </g>
+
+          <!-- Tile 4 — Orange 9 -->
+          <g transform="rotate(5, 325, 75)" filter="url(#tileShadow)">
+            <rect x="291" y="16" width="72" height="100" rx="7" fill="#F5EDD8" stroke="#C8A96E" stroke-width="2"/>
+            <rect x="295" y="20" width="64" height="92" rx="5" fill="#FAF3E4" stroke="#D4B47A" stroke-width="1"/>
+            <text x="327" y="84" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="44" fill="#D4680A">9</text>
+          </g>
+
+          <!-- Tile 5 — Red 13 -->
+          <g transform="rotate(-4, 415, 75)" filter="url(#tileShadow)">
+            <rect x="381" y="20" width="72" height="100" rx="7" fill="#F5EDD8" stroke="#C8A96E" stroke-width="2"/>
+            <rect x="385" y="24" width="64" height="92" rx="5" fill="#FAF3E4" stroke="#D4B47A" stroke-width="1"/>
+            <text x="417" y="88" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="38" fill="#C0392B">13</text>
+          </g>
+
+          <!-- Tile 6 — Purple JKR (fully visible) -->
+          <g transform="rotate(7, 510, 75)" filter="url(#tileShadow)">
+            <rect x="474" y="24" width="72" height="100" rx="7" fill="#F5EDD8" stroke="#C8A96E" stroke-width="2"/>
+            <rect x="478" y="28" width="64" height="92" rx="5" fill="#FAF3E4" stroke="#D4B47A" stroke-width="1"/>
+            <text x="510" y="84" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="20" fill="#7B1FD6">JKR</text>
+          </g>
+
+          </g><!-- end centred tile group -->
+
+          <!-- Tile rack bar -->
+          <rect x="0" y="130" width="600" height="22" rx="5" fill="#8B5E1E" opacity="0.6"/>
+          <rect x="0" y="130" width="600" height="6" rx="3" fill="#C49A44" opacity="0.5"/>
+        </svg>
+      </div>
+      <h1 class="game-title">Game Timer</h1>
+    </header>
+
+    <!-- Timer Card -->
+    <section class="timer-card" id="timerCard">
+      <div class="player-label">Player's Turn</div>
+
+      <div class="timer-display-wrap">
+        <svg class="ring-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="110" cy="110" r="95" class="ring-bg" />
+          <circle cx="110" cy="110" r="95" class="ring-progress" id="ringProgress" />
+        </svg>
+        <div class="timer-display" id="timerDisplay">1:00</div>
+      </div>
+
+      <!-- Adjust time -->
+      <div class="adjust-row">
+        <button class="adj-btn" id="btnMinus" aria-label="Subtract 5 seconds">−5s</button>
+        <span class="adj-label" id="adjLabel">60s per turn</span>
+        <button class="adj-btn" id="btnPlus" aria-label="Add 5 seconds">+5s</button>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-row">
+        <button class="ctrl-btn play-btn" id="btnPlayPause" aria-label="Play or pause timer">
+          <svg class="icon-play" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 4l14 8-14 8V4z" fill="currentColor"/>
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+            <rect x="5" y="4" width="4" height="16" rx="1.5" fill="currentColor"/>
+            <rect x="15" y="4" width="4" height="16" rx="1.5" fill="currentColor"/>
+          </svg>
+          <span id="playPauseLabel">Play</span>
+        </button>
+        <button class="ctrl-btn skip-btn" id="btnSkip" aria-label="Skip turn">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 4l10 8-10 8V4z" fill="currentColor"/>
+            <rect x="17" y="4" width="3" height="16" rx="1" fill="currentColor"/>
+          </svg>
+          Skip
+        </button>
+      </div>
+
+    </section>
+
+    <footer class="footer">v<span id="versionLabel"></span></footer>
+  </main>
+
+</body>
+</html>
